@@ -45,21 +45,22 @@ function getStatus (site, msg) {
       data += chunk
     })
     response.on(`end`, () => {
-      const parsedJSON = JSON.parse(data)
-      const embed = new Discord.RichEmbed()
-
-      if (parsedJSON['error'] === 'Too many requests to the same site.') {
-        embed
-          .setColor(16711680)
-          .setThumbnail('https://cdn.pixabay.com/photo/2017/02/12/21/29/false-2061132_960_720.png')
-          .addField('**ERROR**', 'You are being rate limited!')
-          .addField('**Too Many Requests**!', 'This bot has sent too many requests to the same domain in a short period of time! Try again in 10 seconds!')
-          .addField('**Liian monta pyyntöä!**', 'Bot on lähettänyt liian monta pyyntöä samaan domainiin lyhyen aikavälin sisässä! Yritä uudelleen 10 sekunnin kuluttua!')
-          .setFooter(`${client.user.tag} | TMR-ERROR`, client.user.displayAvatarURL)
-
-        return msg.channel.send(embed)
-      }
       try {
+        const parsedJSON = JSON.parse(data)
+        const embed = new Discord.RichEmbed()
+
+        if (parsedJSON['error'] === 'Too many requests to the same site.') {
+          embed
+            .setColor(16711680)
+            .setThumbnail('https://cdn.pixabay.com/photo/2017/02/12/21/29/false-2061132_960_720.png')
+            .addField('**ERROR**', 'You are being rate limited!')
+            .addField('**Too Many Requests**!', 'This bot has sent too many requests to the same domain in a short period of time! Try again in 10 seconds!')
+            .addField('**Liian monta pyyntöä!**', 'Bot on lähettänyt liian monta pyyntöä samaan domainiin lyhyen aikavälin sisässä! Yritä uudelleen 10 sekunnin kuluttua!')
+            .setFooter(`${client.user.tag} | TMR-ERROR`, client.user.displayAvatarURL)
+
+          return msg.channel.send(embed)
+        }
+
         embed
           .setDescription(`Testasin onko ${parsedJSON[`host`]} alhaalla`)
           .setFooter(`${client.user.tag} | Is it down?`, client.user.displayAvatarURL)
