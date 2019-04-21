@@ -45,9 +45,22 @@ function getStatus (site, msg) {
       data += chunk
     })
     response.on(`end`, () => {
+      const parsedJSON = JSON.parse(data)
+      const embed = new Discord.RichEmbed()
+
+      if (parsedJSON['error'] === 'Too many requests to the same site.') {
+        embed
+          .setColor(16711680)
+          .setThumbnail('https://cdn.pixabay.com/photo/2017/02/12/21/29/false-2061132_960_720.png')
+          .addField('**ERROR**', 'You are being rate limited!')
+          .addField('**Too Many Requests**!', 'This bot has sent too many requests to the same domain in a short period of time! Try again in 10 seconds!')
+          .addField('**Liian monta pyyntöä!**', 'Bot on lähettänyt liian monta pyyntöä samaan domainiin lyhyen aikavälin sisässä! Yritä uudelleen 10 sekunnin kuluttua!')
+          .setFooter(`${client.user.tag} | TMR-ERROR`, client.user.displayAvatarURL)
+
+        return msg.channel.send(embed)
+      }
       try {
-        const parsedJSON = JSON.parse(data)
-        const embed = new Discord.RichEmbed()
+        embed
           .setDescription(`Testasin onko ${parsedJSON[`host`]} alhaalla`)
           .setFooter(`${client.user.tag} | Is it down?`, client.user.displayAvatarURL)
 
@@ -64,6 +77,7 @@ function getStatus (site, msg) {
             .addField("Yes, the site is indeed down and doesn't work as intended!", "The bot's API's connection to the website is not working. If you are having problems connecting, its not your connection's fault.")
             .addField(`Kyllä, sivu on alhaalla ja se ei toimi kuten pitäisi!`, `Botin API:n yhteys nettisivulle ei toimi. Jos sinulla on ongelmia yhdistää kyseisellä verkkosivulle, ongelma ei ole sinun yhteydessäsi.`)
         }
+
         return msg.channel.send(embed)
       } catch (e) {
         const embed = new Discord.RichEmbed()
@@ -101,7 +115,7 @@ client.on(`ready`, () => {
 
 client.on(`raw`, event => {
   let reactionChannel
-  console.log(event)
+  //  console.log(event)
   const eventName = event.t
   if (eventName === `MESSAGE_REACTION_ADD`) {
     if (event.d.message_id === `561582602452992001`) {
@@ -187,26 +201,26 @@ client.on(`message`, async (msg) => {
           .setFooter(`${client.user.tag} | TLD-ERROR`, client.user.displayAvatarURL)
           .setColor(16711680)
           .setThumbnail(`https://cdn.pixabay.com/photo/2017/02/12/21/29/false-2061132_960_720.png`)
-          .addField("**ERROR**", `Something went wrong :/`)
-          .addField("**You did not provide a valid domain name!**", `A valid domain name includes the domain itself(**example**.com) and a TLD(example**.com**)! Please try again!`)
-          .addField("**ERROR**", `Jotain meni pieleen :/`)
-          .addField("**Et syöttänyt pätevää domainia!**", `Pätevään domainiin kuuluu domain itse (**example**.com) sekä TLD (example**.com**)! Ole hyvä ja yritä uudelleen!`)
+          .addField('**ERROR**', `Something went wrong :/`)
+          .addField('**You did not provide a valid domain name!**', `A valid domain name includes the domain itself(**example**.com) and a TLD(example**.com**)! Please try again!`)
+          .addField('**ERROR**', `Jotain meni pieleen :/`)
+          .addField('**Et syöttänyt pätevää domainia!**', `Pätevään domainiin kuuluu domain itse (**example**.com) sekä TLD (example**.com**)! Ole hyvä ja yritä uudelleen!`)
         return msg.channel.send(embed)
-          
-         } else {
+      } else {
         getStatus(args[1], msg)
       }
-    } catch (e) {const embed = new Discord.RichEmbed()
+    } catch (e) {
+      const embed = new Discord.RichEmbed()
       embed
         .setFooter(`${client.user.tag} | DOMAIN-ERROR`, client.user.displayAvatarURL)
         .setColor(16711680)
         .setThumbnail(`https://cdn.pixabay.com/photo/2017/02/12/21/29/false-2061132_960_720.png`)
-        .addField("**ERROR**", `Something went wrong :/`)
-        .addField("**You did not provide a valid domain name!**", `A valid domain name includes the domain itself(**example**.com) and a TLD(example**.com**)! Please try again!`)
-        .addField("**ERROR**", `Jotain meni pieleen :/`)
-        .addField("**Et syöttänyt pätevää domainia!**", `Pätevään domainiin kuuluu domain itse (**example**.com) sekä TLD (example**.com**)! Ole hyvä ja yritä uudelleen!`)
+        .addField('**ERROR**', `Something went wrong :/`)
+        .addField('**You did not provide a valid domain name!**', `A valid domain name includes the domain itself(**example**.com) and a TLD(example**.com**)! Please try again!`)
+        .addField('**ERROR**', `Jotain meni pieleen :/`)
+        .addField('**Et syöttänyt pätevää domainia!**', `Pätevään domainiin kuuluu domain itse (**example**.com) sekä TLD (example**.com**)! Ole hyvä ja yritä uudelleen!`)
       return msg.channel.send(embed)
-      }
+    }
   } else if (msgLower === `help`) {
     msg.channel.send(`Lähetetty YV!`)
       .then(msg.author.send(`**PLACEHOLDER**`))
