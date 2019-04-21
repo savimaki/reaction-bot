@@ -90,7 +90,7 @@ function getStatus (site, msg) {
           .addField(`If the problem persists...`, `Please contact **${ownerTag}**`)
           .addField(`Jos ongelma jatkuu...`, `Lähetä viestiä henkilölle **${ownerTag}**`)
           .addField(`Error:`, e.message)
-          .setFooter(`${client.user.tag} | ERROR`, client.user.displayAvatarURL)
+          .setFooter(`${client.user.tag} | HTTP-ERROR`, client.user.displayAvatarURL)
         return msg.channel.send(embed)
       }
     })
