@@ -1,6 +1,7 @@
 const Discord = require(`discord.js`)
 const client = new Discord.Client()
 const https = require(`https`)
+const randomHexColor = require(`random-hex-color`)
 
 const activitiesList = [
   `on my Christian Minecraft Server`,
@@ -102,7 +103,8 @@ function getStatus (site, msg) {
 
 client.on(`ready`, () => {
   console.log(`Logged in as ${client.user.tag}!`)
-  client.user.setStatus(`available`)
+  client.user.setStatus(`dnd`)
+  console.log(`Starting up...`)
   client.user.setPresence({
     game: {
       name: `Starting up...`
@@ -111,6 +113,7 @@ client.on(`ready`, () => {
   setInterval(() => {
     const index = Math.floor(Math.random() * (activitiesList.length - 1) + 1)
     client.user.setActivity(activitiesList[index])
+    client.user.setStatus(`available`)
   }, 15000)
 })
 
@@ -223,9 +226,15 @@ client.on(`message`, async (msg) => {
       return msg.channel.send(embed)
     }
   } else if (msgLower === `help`) {
+    const embed = new Discord.RichEmbed()
+    embed
+      .setFooter(`${client.user.tag} | Playing ${client.user.presence.game}`)
+      .setColor(randomHexColor())
+      .setThumbnail(`https://discordemoji.com/assets/emoji/BOI.png`)
+      .addField(``, '')
     msg.channel.send(`Lähetetty YV!`)
-      .then(msg.author.send(`**PLACEHOLDER**`))
-  }
+      .then(msg.author.send(embed)
+      )}
 })
 
 client.on(`error`, error => {
