@@ -231,10 +231,38 @@ client.on(`message`, async (msg) => {
       .setFooter(`${client.user.tag} | Playing ${client.user.presence.game}`)
       .setColor(randomHexColor())
       .setThumbnail(`https://discordemoji.com/assets/emoji/BOI.png`)
-      .addField(``, '')
+      .addField(`**Sadly, this is still a**`, '**PLACEHOLDER**')
     msg.channel.send(`Lähetetty YV!`)
       .then(msg.author.send(embed)
       )}
+    else if (msg.content === `version`) {
+      const embed = new Discord.RichEmbed()
+      const version = require('./package.json').version
+      embed
+        .setFooter(`${client.user.tag} | Playing ${client.user.presence.game}`)
+        .setColor(randomHexColor())
+        .addField('**The current version is**', `${version}`)
+      msg.channel.send(embed)
+      }
+      else if (msg.content === `dependencies`) {
+        const embed = new Discord.RichEmbed()
+        const dependencies = require('./package.json').dependencies
+        embed
+          .setFooter(`${client.user.tag} | Playing ${client.user.presence.game}`)
+          .setColor(randomHexColor())
+          .addField('**The bot uses following dependencies**', `-${Object.keys(dependencies).join('\n-')}`)
+        msg.channel.send(embed)
+        }
+        else if (msg.content === `author`) {
+          const embed = new Discord.RichEmbed()
+          const author = require('./package.json').author
+          embed
+            .setFooter(`${client.user.tag} | Playing ${client.user.presence.game}`)
+            .setColor(randomHexColor())
+            .addField('**The author of this bot is**', `**${author}**`)
+            .setThumbnail(`https://cdn.discordapp.com/avatars/304105273428279308/c10592cce3ce61db02ba5e4b5ce276a8.png?size=4096`)
+          msg.channel.send(embed)
+          }
 })
 
 client.on(`error`, error => {
